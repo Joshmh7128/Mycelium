@@ -5,8 +5,7 @@ using UnityEngine;
 public abstract class QuasiBehaviour : MonoBehaviour
 {
     float QuasiTimeStep = 0.6f;
-
-    new public static QuasiBehaviour quasiBehaviour;
+    public float QuasiDeltaTime = 0.6f; // the time since the last frame in static form
 
     // Start is called before the first frame update
     void Start()
