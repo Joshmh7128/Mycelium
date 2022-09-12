@@ -4,14 +4,15 @@ using UnityEngine;
 
 public abstract class QuasiBehaviour : MonoBehaviour
 {
-    float QuasiTimeStep = 0.6f;
-    public float QuasiDeltaTime = 0.6f; // the time since the last frame in static form
+    float QuasiTimeStep = 0.01f;
+    [HideInInspector] public float QuasiDeltaTime = 0.01f; // the time since the last frame in static form
 
     // Start is called before the first frame update
     void Start()
     {
         // start quasitime
         StartCoroutine(QuasiTime());
+        QuasiStart();
     }
 
     // the coroutine that runs our quasitime
