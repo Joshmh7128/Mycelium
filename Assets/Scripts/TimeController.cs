@@ -25,5 +25,7 @@ public class TimeController : MonoBehaviour
     {
         // update our UI
         UpdateUI();
+        // update our ui
+        UpdateTime();
     }
 }

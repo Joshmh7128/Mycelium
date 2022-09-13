@@ -481,7 +481,7 @@ GameObject:
   - component: {fileID: 3328925417057817351}
   - component: {fileID: 3328925417057817350}
   m_Layer: 0
-  m_Name: TreeAgent
+  m_Name: TreeAgentPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -524,7 +524,7 @@ MonoBehaviour:
   dropRadius: 5
   dropAmount: 1
   dropAge: 5
-  treePrefab: {fileID: 3328925417057817352, guid: 57b3a61ca57a41940988aa4abf49a57e, type: 3}
+  treePrefab: {fileID: 3328925417057817352}
   deadTreePrefab: {fileID: 3671045944111496001, guid: 09b517806b6899b4b84a9599be93f394, type: 3}
 --- !u!1 &3328925417389829764
 GameObject:
