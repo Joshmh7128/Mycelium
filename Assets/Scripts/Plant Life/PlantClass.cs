@@ -43,20 +43,19 @@ public abstract class PlantClass : MonoBehaviour
     [SerializeField] protected float processGamma; // the length of the year in seconds
 
     [Tooltip("The Delta is the amount that we add to the epsilon each frame")]
-    [SerializeField] protected float processDelta; // the length of the year in seconds
+    [HideInInspector] protected float processDelta; // the length of the year in seconds
 
-    // photosynthesis function, happens once every year
-    [SerializeField]
-    protected virtual void PhotoSynthesis()
+
+
+    private void FixedUpdate()
     {
-        // take water, sunlight, and carbon dioxide, then turn it into oxygen, growth, and biproducts
-
-        Debug.Log("it has been " + processGamma + " seconds");
+        // run our step
+        ProcessStep();
     }
 
     // step timestep function
     [SerializeField]
-    protected virtual void ExecuteStep()
+    protected virtual void ProcessStep()
     {
         processDelta = Time.deltaTime; // make sure that every second processDelta = 1
 
@@ -68,16 +67,59 @@ public abstract class PlantClass : MonoBehaviour
 
         if (processEpsilon > processGamma)
         {
-            ProcessStep();
+            ExecuteStep();
             processEpsilon = 0;
         }
     }
 
     // process step
     [SerializeField]
-    protected virtual void ProcessStep()
+    protected virtual void ExecuteStep()
     {
         PhotoSynthesis();
+    }
+
+    // photosynthesis function, happens once every step execeution
+    [SerializeField]
+    protected virtual void PhotoSynthesis()
+    {
+        // take water, sunlight, and carbon dioxide, then turn it into oxygen, growth, and biproducts
+
+        // forumla: 1 carbonDioxide + 1 water * sunlight/sunlightMax = 0.16 carbon, 1 oxygen
+
+        // determine if we can begin our photosynthesis; plant needs at least 1 carbonDioxide & 1 water, and sun
+        if (carbonDioxide >= 1 && water >= 1 && sunlight > 0)
+        {
+            // max utilization values
+            float utilizationFactor = sunlight / sunlightMax;
+
+            // for each nurtient you can process 1 carbon dioxide
+            float usableCarbonDioxide = nutrients * utilizationFactor;
+            // if you can process more carbon dioxide than you have, set the usable carbon dioxide to what you have
+            if (usableCarbonDioxide > carbonDioxide) { usableCarbonDioxide = carbonDioxide * utilizationFactor; }
+
+            // you can never use more water than you can usable carbon dioxide
+            float usableWater = 0;
+            // set usable water
+            if (usableCarbonDioxide <= water) { usableWater = usableCarbonDioxide; }
+            // if there is more water available than there is carbon dioxide, lower the usable water to water, then make sure we can only use as much carbondioxide as we have water available
+            if (usableCarbonDioxide > water) { usableWater = water * utilizationFactor; usableCarbonDioxide = water * utilizationFactor; }
+
+            // set our product total
+            float productTotal = (usableCarbonDioxide + usableWater) * sunlight / sunlightMax;
+
+            // use our product total to produce
+            carbon += productTotal / 6;
+            oxygen += productTotal;
+
+            // use our product total to consume
+            water -= usableWater;
+            carbonDioxide -= usableCarbonDioxide; // take away the carbon dioxide that is used
+            nutrients -= usableCarbonDioxide; // take away the amount of carbon dioxide we were able to use
+
+        }
+
+
     }
 
 }
