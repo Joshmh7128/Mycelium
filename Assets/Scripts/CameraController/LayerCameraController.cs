@@ -39,43 +39,61 @@ public class LayerCameraController : MonoBehaviour
         // up and down movement
         if (Input.GetKeyDown(KeyCode.PageDown))
         {
+            targetPos.y = 0f;
             if (layers[targetLayerInt + 1]) { targetLayerInt++; }
+
         }
 
         if (Input.GetKeyDown(KeyCode.PageUp))
         {
+            targetPos.y = 0f;
             if (layers[targetLayerInt - 1]) { targetLayerInt--; }
         }
 
         // Y rot
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            if (yRot + yRotIncrement < 360) { yRot += yRotIncrement; } else { yRot = 0; }
-            targetRot = new Vector3(targetRot.x, yRot, targetRot.z);
+            //if (yRot + yRotIncrement < 360) { yRot += yRotIncrement; } else { yRot = 0;
+                yRot += yRotIncrement;
+                targetRot = new Vector3(targetRot.x, yRot, targetRot.z);
         }        
         
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if (yRot - yRotIncrement > 0) { yRot -= yRotIncrement; } else { yRot = 360; }
+            //if (yRot - yRotIncrement > 0) { yRot -= yRotIncrement; } else { yRot = 360; }
+            yRot -= yRotIncrement;
             targetRot = new Vector3(targetRot.x, yRot, targetRot.z);
         }
 
+        /*
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             is2D = !is2D;
             Swap2D(is2D);
-        }
+        }*/
 
         // scroll input
         if (Input.mouseScrollDelta.y < 0) { zoom += zoomSpeed; }
         if (Input.mouseScrollDelta.y > 0) { zoom -= zoomSpeed; }
-        zoom = Mathf.Clamp(zoom, 7, 100);
+        zoom = Mathf.Clamp(zoom, -2000, 200);
 
         // movement input
         if (Mathf.Abs(Input.GetAxis("Vertical")) != 0 || Mathf.Abs(Input.GetAxis("Horizontal")) != 0)
         {
             // move around
-            targetPos += new Vector3(Input.GetAxis("Horizontal") * moveSpeed, targetPos.y, Input.GetAxis("Vertical") * moveSpeed);
+            // get movement relative to the player's forward direction
+            if (!is2D)
+            {
+                targetPos += transform.forward * Input.GetAxis("Vertical");
+                targetPos += transform.right * Input.GetAxis("Horizontal");
+            } 
+            
+            if (is2D)
+            {
+                targetPos += transform.up * Input.GetAxis("Vertical");
+                targetPos += transform.right * Input.GetAxis("Horizontal");
+            }
+
         }
 
         // update our layers
@@ -86,14 +104,17 @@ public class LayerCameraController : MonoBehaviour
     void ProcessMovement()
     {
         // adjust target position on the Y axis
-        targetPos = new Vector3(targetPos.x, layers[targetLayerInt].transform.position.y, targetPos.z);
+        if (!is2D) { targetPos = new Vector3(targetPos.x, layers[targetLayerInt].transform.position.y, targetPos.z); }
+
+        if (is2D) { targetPos = new Vector3(targetPos.x, targetPos.y, targetPos.z); }
         // lerp to our movement input on all axes
         transform.position = Vector3.Lerp(transform.position, targetPos, lerpSpeed * Time.deltaTime);
         // process rotation with a quaternion lerp
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(targetRot.x, yRot, targetRot.z), lerpSpeed * Time.deltaTime);
         // our zooming
-        Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, zoom, lerpSpeed * Time.deltaTime);
+        Camera.main.transform.position = transform.position + Camera.main.transform.forward * zoom;
     }
+
 
     // disable layers above
     void UpdateLayers()
@@ -115,7 +136,8 @@ public class LayerCameraController : MonoBehaviour
     // swap 2d
     void Swap2D(bool state)
     {
+
         if (!state) { targetRot = new Vector3(30, yRot, 0); }
-        if (state) { targetRot = new Vector3(2, yRot, 0); }
+        if (state) { targetRot = new Vector3(0, yRot, 0); targetLayerInt = 0; }
     }
 }
