@@ -168,7 +168,7 @@ MonoBehaviour:
   growth: 0
   offspring: 0
   processEpsilon: 0
-  processGamma: 5
+  processGamma: 2
 --- !u!4 &737752636
 Transform:
   m_ObjectHideFlags: 0
