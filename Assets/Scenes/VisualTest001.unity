@@ -18866,7 +18866,7 @@ MonoBehaviour:
   yRot: 0
   yRotIncrement: 45
   zoom: 30
-  zoomSpeed: 5
+  zoomSpeed: 50
   moveSpeed: 1
 --- !u!1 &938701728
 GameObject:

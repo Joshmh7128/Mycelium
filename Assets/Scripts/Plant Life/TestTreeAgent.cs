@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TreeAgent : MonoBehaviour
+public class TestTreeAgent : MonoBehaviour
 {
     /// 
     /// tree will
@@ -86,7 +86,7 @@ public class TreeAgent : MonoBehaviour
                 Vector3 spawnRadius = new Vector3(Random.Range(-dropRadius, dropRadius), 0f, Random.Range(-dropRadius, dropRadius));
                 // instantiate a tree there
                 GameObject newTree = Instantiate(treePrefab, transform.position + spawnRadius, Quaternion.identity, null);
-                newTree.GetComponent<TreeAgent>().cosmeticTree.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                newTree.GetComponent<TestTreeAgent>().cosmeticTree.localScale = new Vector3(0.1f, 0.1f, 0.1f);
             }
 
             // then destroy this object
