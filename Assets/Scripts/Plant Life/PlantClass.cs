@@ -37,9 +37,9 @@ public abstract class PlantClass : MonoBehaviour
     // time management
     [Header(" ~~ Time Management ~~ ")]
     [Tooltip("The Epsilon is the current amount of time we are adding to to reach the Gamma")]
-    [SerializeField] protected float processEpsilon; // the length of the year in seconds
+    [HideInInspector] protected float processEpsilon; // the length of the year in seconds
 
-    [Tooltip("The Gamma is the step length")]
+    [Tooltip("The Gamma is the step length of one year in seconds")]
     [SerializeField] protected float processGamma; // the length of the year in seconds
 
     [Tooltip("The Delta is the amount that we add to the epsilon each frame")]
@@ -74,7 +74,7 @@ public abstract class PlantClass : MonoBehaviour
 
     // process step
     [SerializeField]
-    protected virtual void ExecuteStep()
+    public virtual void ExecuteStep()
     {
         PhotoSynthesis();
     }
