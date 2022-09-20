@@ -37,14 +37,14 @@ public class LayerCameraController : MonoBehaviour
     void ProcessInput()
     {
         // up and down movement
-        if (Input.GetKeyDown(KeyCode.PageDown))
+        if (Input.GetKeyDown(KeyCode.Z))
         {
             targetPos.y = 0f;
             if (layers[targetLayerInt + 1]) { targetLayerInt++; }
 
         }
 
-        if (Input.GetKeyDown(KeyCode.PageUp))
+        if (Input.GetKeyDown(KeyCode.X))
         {
             targetPos.y = 0f;
             if (layers[targetLayerInt - 1]) { targetLayerInt--; }
@@ -73,9 +73,9 @@ public class LayerCameraController : MonoBehaviour
         }*/
 
         // scroll input
-        if (Input.mouseScrollDelta.y < 0) { zoom += zoomSpeed; }
-        if (Input.mouseScrollDelta.y > 0) { zoom -= zoomSpeed; }
-        zoom = Mathf.Clamp(zoom, -2000, 200);
+        if (Input.mouseScrollDelta.y > 0) { zoom += zoomSpeed; }
+        if (Input.mouseScrollDelta.y < 0) { zoom -= zoomSpeed; }
+        zoom = Mathf.Clamp(zoom, -5000, -1000);
 
         // movement input
         if (Mathf.Abs(Input.GetAxis("Vertical")) != 0 || Mathf.Abs(Input.GetAxis("Horizontal")) != 0)
