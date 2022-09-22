@@ -12,7 +12,7 @@ public class NW_ResourceManager : MonoBehaviour
     private void Awake() => instance = this;
   
     // list of all resource gameobjects
-    public List<GameObject> Resources = new List<GameObject>(); // all resources are placed in here
+    public List<GameObject> resourceObjects = new List<GameObject>(); // all resources are placed in here
 
 
 }
