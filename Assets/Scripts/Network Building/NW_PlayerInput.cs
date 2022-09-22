@@ -12,6 +12,7 @@ public class NW_PlayerInput : MonoBehaviour
     // our mouse world position
     Vector3 castTargetPosition, worldPosition;
     [SerializeField] Transform mouseTransform;
+    [SerializeField] LineRenderer emitterDisplayLine;
 
     NW_NodeClass activeNode;
 
@@ -24,8 +25,12 @@ public class NW_PlayerInput : MonoBehaviour
     {
         SetMousePos();
         if (activeNode != null) SelectedNodeDisplay();
+
+        // on mouse down
+        OnGetMouseDown();
     }
 
+    // moves the mouse around the world
     void SetMousePos()
     {
         // move this to the position of our mouse in world space
@@ -40,7 +45,7 @@ public class NW_PlayerInput : MonoBehaviour
         mouseTransform.position = worldPosition;
     }
 
-    void GetMouseDown() 
+    void OnGetMouseDown() 
     {
         if (Input.GetMouseButtonDown(0)) 
         {
@@ -61,18 +66,34 @@ public class NW_PlayerInput : MonoBehaviour
                     }
                 }
             }
-            else
+            if (activeNode)
             {
-                // Placing an emitter from selected node
-
-
+                // start the line from the node
+                emitterDisplayLine.SetPosition(0, activeNode.transform.position);
             }
         }
     }
 
-    void SelectedNodeDisplay() {
+    void OnGetMouseUp()
+    {
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (activeNode != null)
+            {
+                // spawn emitter
 
+                // set active node to null
+                activeNode = null;
+                // reset display line
+                emitterDisplayLine.enabled = false;
+            }
+        }
+    }
 
+    // run whenever want to have the first indexed position of the line displayed in game
+    void ShowLine() 
+    {
+        emitterDisplayLine.SetPosition(1, mouseTransform.position);
     }
 
     void HideMouse()
