@@ -14,7 +14,7 @@ public class NW_PlayerInput : MonoBehaviour
     [SerializeField] Transform mouseTransform;
     [SerializeField] LineRenderer emitterDisplayLine;
 
-    NW_NodeClass activeNode;
+    [SerializeField] NW_NodeClass activeNode;
 
     private void Start()
     {
@@ -24,10 +24,9 @@ public class NW_PlayerInput : MonoBehaviour
     private void Update()
     {
         SetMousePos();
-        if (activeNode != null) SelectedNodeDisplay();
-
         // on mouse down
         OnGetMouseDown();
+        OnGetMouseUp();
     }
 
     // moves the mouse around the world
@@ -53,9 +52,11 @@ public class NW_PlayerInput : MonoBehaviour
             if (activeNode != null)
             {
                 // Get all colliders within the cursor bounds
-                Collider[] colliders = Physics.OverlapSphere(mouseTransform.position, 2f);
+                Collider[] colliders = Physics.OverlapSphere(mouseTransform.position, 2f, Physics.AllLayers, QueryTriggerInteraction.Collide);
                 foreach (Collider p in colliders)
                 {
+                    Debug.Log(p);
+
                     if (p.GetComponent<NW_NodeClass>())
                     {
                         // Set default node to first
@@ -70,6 +71,7 @@ public class NW_PlayerInput : MonoBehaviour
             {
                 // start the line from the node
                 emitterDisplayLine.SetPosition(0, activeNode.transform.position);
+                ShowLine();
             }
         }
     }
@@ -93,6 +95,7 @@ public class NW_PlayerInput : MonoBehaviour
     // run whenever want to have the first indexed position of the line displayed in game
     void ShowLine() 
     {
+        emitterDisplayLine.enabled = true;
         emitterDisplayLine.SetPosition(1, mouseTransform.position);
     }
 

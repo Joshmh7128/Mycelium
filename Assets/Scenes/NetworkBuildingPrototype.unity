@@ -630,6 +630,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseTransform: {fileID: 746835154}
+  emitterDisplayLine: {fileID: 1839607927}
 --- !u!4 &1839607926
 Transform:
   m_ObjectHideFlags: 0
