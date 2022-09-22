@@ -23,6 +23,7 @@ public class NW_PlayerInput : MonoBehaviour
     private void Update()
     {
         SetMousePos();
+        if (activeNode != null) SelectedNodeDisplay();
     }
 
     void SetMousePos()
@@ -43,18 +44,35 @@ public class NW_PlayerInput : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0)) 
         {
-            Collider[] colliders = Physics.OverlapSphere(mouseTransform.position, 2f);
-            Collider activeCollider = null;
-            foreach (Collider p in colliders) 
+            // Selecting a new node
+            if (activeNode != null)
             {
-                if (p.GetComponent<NW_NodeClass>())
+                // Get all colliders within the cursor bounds
+                Collider[] colliders = Physics.OverlapSphere(mouseTransform.position, 2f);
+                foreach (Collider p in colliders)
                 {
-                    if (Vector3.Distance(p.transform.position, mouseTransform.position) < Vector3.Distance(activeCollider.transform.position, mouseTransform.position))
-                        activeCollider = p;
+                    if (p.GetComponent<NW_NodeClass>())
+                    {
+                        // Set default node to first
+                        if (activeNode == null) activeNode = p.GetComponent<NW_NodeClass>();
+                        // Get closest node to cursor
+                        if (Vector3.Distance(p.transform.position, mouseTransform.position) < Vector3.Distance(activeNode.transform.position, mouseTransform.position))
+                            activeNode = p.GetComponent<NW_NodeClass>();
+                    }
                 }
             }
-                
+            else
+            {
+                // Placing an emitter from selected node
+
+
+            }
         }
+    }
+
+    void SelectedNodeDisplay() {
+
+
     }
 
     void HideMouse()
