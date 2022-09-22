@@ -13,10 +13,10 @@ public class LayerCameraController : MonoBehaviour
     [SerializeField] List<GameObject> layers; // our layers
     [SerializeField] GameObject targetLayer; // our current layer
     [SerializeField] int targetLayerInt; // the current layer we're working on
-    [SerializeField] float lerpSpeed; // how fast we move from layer to layer
+    [SerializeField] float moveSpeed; // how fast we move from layer to layer
     bool is2D;
     [SerializeField] Vector3 targetRot, targetPos;
-    [SerializeField] float yRot, yRotIncrement, zoom, zoomSpeed, moveSpeed; // our target y rotation
+    [SerializeField] float yRot, yRotIncrement, zoom, zoomSpeed; // our target y rotation
 
     private void Start()
     {
@@ -108,9 +108,9 @@ public class LayerCameraController : MonoBehaviour
 
         if (is2D) { targetPos = new Vector3(targetPos.x, targetPos.y, targetPos.z); }
         // lerp to our movement input on all axes
-        transform.position = Vector3.Lerp(transform.position, targetPos, lerpSpeed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
         // process rotation with a quaternion lerp
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(targetRot.x, yRot, targetRot.z), lerpSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(targetRot.x, yRot, targetRot.z), moveSpeed * Time.deltaTime);
         // our zooming
         Camera.main.transform.position = transform.position + Camera.main.transform.forward * zoom;
     }

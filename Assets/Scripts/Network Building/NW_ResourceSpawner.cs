@@ -13,6 +13,8 @@ public class NW_ResourceSpawner : MonoBehaviour
     float spawnTime; // how long between spawns?
     [SerializeField] float spawnTimeMin, spawnTimeMax;
     [SerializeField] float spawnRadius;
+    [SerializeField] float resourceCapacity; // how many resources we can have
+    
 
     private void Start()
     {
@@ -42,11 +44,15 @@ public class NW_ResourceSpawner : MonoBehaviour
     // create a new resource
     private void SpawnResource()
     {
-        Vector3 spawnPos = new Vector3(transform.position.x + (Random.Range(-spawnRadius, spawnRadius)), 0, transform.position.z + (Random.Range(-spawnRadius, spawnRadius)));
-
-        // Instantiate resource within radius
-        GameObject resource = Instantiate(resourcePrefab, spawnPos, Quaternion.identity, null);
-        // add it to the manager
-        resourceManager.resourceObjects.Add(resource);
+        // can we spawn?
+        if (transform.childCount < resourceCapacity)
+        {
+            // set our spawn pos
+            Vector3 spawnPos = new Vector3((Random.Range(-spawnRadius, spawnRadius)), 0, (Random.Range(-spawnRadius, spawnRadius)));
+            // Instantiate resource within radius
+            GameObject resource = Instantiate(resourcePrefab, transform.position + spawnPos, Quaternion.identity, transform);
+            // add it to the manager
+            resourceManager.resourceObjects.Add(resource);
+        }
     }
 }
