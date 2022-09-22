@@ -11,6 +11,7 @@ public class NW_ResourceSpawner : MonoBehaviour
     [SerializeField] NW_ResourceManager resourceManager; // the resource manager of the scene
     float spawnTime; // how long between spawns?
     [SerializeField] float spawnTimeMin, spawnTimeMax;
+    [SerializeField] float spawnRadius;
 
     private void Start()
     {
@@ -31,13 +32,16 @@ public class NW_ResourceSpawner : MonoBehaviour
     {
         yield return new WaitForSeconds(spawnTime);
         // do the thing!
-
+        SpawnResource();
         // restart!
         StartCoroutine(CreateResource());
     }
 
     private void SpawnResource()
     {
+        Vector3 spawnPos = new Vector3(transform.position.x + (Random.Range(-spawnRadius, spawnRadius)), 0, transform.position.z + (Random.Range(-spawnRadius, spawnRadius)));
 
+        // Instantiate resource within radius
+        Instantiate(resourcePrefab, spawnPos, Quaternion.identity, null);
     }
 }
