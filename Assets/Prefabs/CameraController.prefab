@@ -135,11 +135,11 @@ MonoBehaviour:
   - {fileID: 0}
   targetLayer: {fileID: 0}
   targetLayerInt: 0
+  moveSpeed: 500
   lerpSpeed: 10
   targetRot: {x: 0, y: 0, z: 0}
   targetPos: {x: 0, y: 0, z: 0}
-  yRot: 0
+  yRot: 45
   yRotIncrement: 45
   zoom: 30
   zoomSpeed: 50
-  moveSpeed: 1

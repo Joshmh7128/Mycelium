@@ -11,6 +11,10 @@ public class NW_NodeClass : MonoBehaviour
     public List<NW_AgentClass> idlePassengers = new List<NW_AgentClass>(); // the passengers waiting to depart
     public List<NW_EmitterClass> emitters = new List<NW_EmitterClass>(); // all of our emitters
 
+    public void CreateEmitter() { 
+        if (idlePassengers.Count > 5) { 
 
+        }
+    }
     
 }

@@ -13,6 +13,8 @@ public class NW_PlayerInput : MonoBehaviour
     Vector3 castTargetPosition, worldPosition;
     [SerializeField] Transform mouseTransform;
 
+    NW_NodeClass activeNode;
+
     private void Start()
     {
         HideMouse();
@@ -35,6 +37,24 @@ public class NW_PlayerInput : MonoBehaviour
         }
 
         mouseTransform.position = worldPosition;
+    }
+
+    void GetMouseDown() 
+    {
+        if (Input.GetMouseButtonDown(0)) 
+        {
+            Collider[] colliders = Physics.OverlapSphere(mouseTransform.position, 2f);
+            Collider activeCollider = null;
+            foreach (Collider p in colliders) 
+            {
+                if (p.GetComponent<NW_NodeClass>())
+                {
+                    if (Vector3.Distance(p.transform.position, mouseTransform.position) < Vector3.Distance(activeCollider.transform.position, mouseTransform.position))
+                        activeCollider = p;
+                }
+            }
+                
+        }
     }
 
     void HideMouse()
