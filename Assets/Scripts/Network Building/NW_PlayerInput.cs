@@ -4,42 +4,42 @@ using UnityEngine;
 
 public class NW_PlayerInput : MonoBehaviour
 {
-    /// prototype mouse control handler
+    /// <summary>
+    /// This script manages the mouse movement and placement of buildings
+    /// </summary>
     /// 
 
-    public GameObject worldSpaceMouse; // the mouse we are moving around and controlling
-    public Transform camTrans;
+    // our mouse world position
+    Vector3 castTargetPosition, worldPosition;
+    [SerializeField] Transform mouseTransform;
 
-    public void Update()
+    private void Start()
+    {
+        HideMouse();
+    }
+
+    private void Update()
     {
         SetMousePos();
     }
 
-    private void Start() => camTrans = Camera.main.gameObject.transform;
-
-    // move the mouse to the camera world space point 
     void SetMousePos()
     {
-        Transform camTrans = Camera.main.gameObject.transform;
+        // move this to the position of our mouse in world space
+        castTargetPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10000f));
+        // do a raycast from the camera to that position and see if there is anything intersecting
+        RaycastHit hit;
+        if (Physics.Linecast(Camera.main.transform.position, castTargetPosition, out hit, Physics.AllLayers, QueryTriggerInteraction.Ignore))
+        {
+            worldPosition = hit.point;
+        }
 
-        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3 rayDir = worldPosition - camTrans.position;
-
-        // raycast in that direction
-        RaycastHit hit; Physics.Raycast(camTrans.position, rayDir, out hit, Mathf.Infinity, Physics.AllLayers, QueryTriggerInteraction.Ignore);
-
-        Vector3 hitPos = hit.point; // set the hit point
-
-        worldSpaceMouse.transform.position = hitPos;
+        mouseTransform.position = worldPosition;
     }
 
-    private void OnDrawGizmos()
+    void HideMouse()
     {
-        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3 rayDir = worldPosition - camTrans.position;
-
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawRay(camTrans.position, worldPosition);
+        Cursor.visible = false;
     }
 
 }
