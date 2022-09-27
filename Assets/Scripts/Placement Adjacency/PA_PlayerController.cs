@@ -28,7 +28,6 @@ public class PA_PlayerController : MonoBehaviour
 
     //Placement state refs
     PA_Placeable purchasedNode;
-    public bool placementValid;
 
     //Purchasables
     public GameObject myceliumPrefab;
@@ -46,43 +45,40 @@ public class PA_PlayerController : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, placementMask))
-        {
-            mousePos = hit.point;
-            if (hit.collider.gameObject.layer == 8) { 
-                placementValid = true;
-            } else placementValid = false;
-        }
+        if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) { 
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, placementMask))
+            {
+                mousePos = hit.point;
+            }
              
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, mouseOverMask))
-        {
-            if (hit.transform.GetComponentInParent<PA_AdjacencyNode>() != mousedNode) ToggleMouseOver(false);
-            mousedNode = hit.transform.GetComponentInParent<PA_AdjacencyNode>();
-            ToggleMouseOver(true);
-            if (Input.GetMouseButton(0)) {
-                cameraController.CenterPoint(hit.collider.gameObject.transform.position);
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, mouseOverMask))
+            {
+                if (hit.transform.GetComponentInParent<PA_AdjacencyNode>() != mousedNode) ToggleMouseOver(false);
+                mousedNode = hit.transform.GetComponentInParent<PA_AdjacencyNode>();
+                ToggleMouseOver(true);
+                if (Input.GetMouseButton(0)) {
+                    cameraController.CenterPoint(hit.collider.gameObject.transform.position);
+                }
             }
-        }
-        else {
-            ToggleMouseOver(false);
-        }
+            else {
+                ToggleMouseOver(false);
+            }
 
-        if (purchasedNode) {
-            purchasedNode.transform.position = mousePos;
-            if (Input.GetMouseButton(0) && placementValid)
-            {
-                purchasedNode.placing = false;
-                PlaceNode();
-            }
-            else if (Input.GetMouseButton(1))
-            {
-                Debug.Log("cancel");
-                purchasedNode.placing = false;
+            if (purchasedNode) {
+                purchasedNode.transform.position = mousePos;
+                if (Input.GetMouseButton(0) && purchasedNode.validPlacement)
+                {
+                    purchasedNode.placing = false;
+                    PlaceNode();
+                }
+                else if (Input.GetMouseButton(1))
+                {
+                    purchasedNode.placing = false;
                 
-                RefundPurchase();
+                    RefundPurchase();
+                }
             }
         }
-        
     }
 
 
@@ -107,11 +103,13 @@ public class PA_PlayerController : MonoBehaviour
         nodeManager.fungusNodes.Add(purchasedNode);
         nodeManager.adjacencyNodes.Add(purchasedNode); // also add to the master list so we can access via adjacency check
         purchasedNode.ConfirmPlace();
+        nodeManager.ToggleFungusRadiusDisplay();
         purchasedNode = null;
     }
 
-    public void BuyMycelium() { 
+    public void BuyMycelium() {
         if (carbonStores >= 25) {
+            if (purchasedNode) RefundPurchase();
             carbonStores -= 25;
             purchasedNode = Instantiate(myceliumPrefab, mousePos, Quaternion.identity, nodeManager.transform).GetComponent<PA_Placeable>();
             StartCoroutine(DelayCall());
@@ -119,6 +117,7 @@ public class PA_PlayerController : MonoBehaviour
     } 
     public void BuyMycorrhiza() { 
         if (carbonStores >= 25) {
+            if (purchasedNode) RefundPurchase();
             carbonStores -= 25;
             purchasedNode = Instantiate(mycorrhizaPrefab, mousePos, Quaternion.identity, nodeManager.transform).GetComponent<PA_Placeable>();
             StartCoroutine(DelayCall());
@@ -128,10 +127,13 @@ public class PA_PlayerController : MonoBehaviour
     IEnumerator DelayCall() {
         yield return new WaitForFixedUpdate();
         purchasedNode.Place();
+        nodeManager.ToggleFungusRadiusDisplay();
     }
 
     public void RefundPurchase() {
         Destroy(purchasedNode.gameObject);
         carbonStores += 25;
+        nodeManager.ToggleFungusRadiusDisplay();
+        purchasedNode = null;
     }
 }

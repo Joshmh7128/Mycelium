@@ -11,6 +11,7 @@ public class PA_Placeable : PA_AdjacencyNode
 
     [SerializeField] Material[] invalidPlaceMaterials;
     public bool placing;
+    public bool validPlacement;
 
     protected override void Start()
     {
@@ -33,18 +34,24 @@ public class PA_Placeable : PA_AdjacencyNode
     }
 
     IEnumerator WhilePlacing() {
+        validPlacement = false;
         yield return new WaitForEndOfFrame();
         ToggleRadiusDisplay(true);
         while (placing)
         {
             yield return new WaitForEndOfFrame();
+            ValidPlacementCheck();
             ToggleValidVisuals();
         }
         ToggleRadiusDisplay(false);
     }
 
+    protected virtual void ValidPlacementCheck() {
+        validPlacement = true;
+    }
+
     void ToggleValidVisuals() { 
-        if (playerController.placementValid) {
+        if (validPlacement) {
             gfxMR.material = gfxMaterials[0];
             adjacencyPlane.GetComponent<MeshRenderer>().material = planeMaterials[0];
         } else {

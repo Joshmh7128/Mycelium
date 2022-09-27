@@ -15,6 +15,8 @@ public class PA_AdjacencyNode : MonoBehaviour
     [SerializeField] protected Material[] planeMaterials;
 
     [Header("~~~ Adjacency Factors ~~~")]
+    public PA_Taxonomy.Kingdom kingdom;
+    public PA_Taxonomy.Species species;
     public float adjacencyRadius;
     public float maxAdjRadius;
     public bool adjRadActive;
@@ -71,7 +73,7 @@ public class PA_AdjacencyNode : MonoBehaviour
     }
 
     // check to see if we are overlapping with any nodes
-    void AdjacencyCheck()
+    protected virtual void AdjacencyCheck()
     {
         // go through the list of nodes
         foreach (PA_AdjacencyNode node in nodeManager.adjacencyNodes)

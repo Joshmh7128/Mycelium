@@ -97,6 +97,8 @@ MonoBehaviour:
   adjacencyPlane: {fileID: 8646818959762604073}
   planeMaterials:
   - {fileID: 2100000, guid: ee8ecbdadf9419e4a8174ce41f5b5a2f, type: 2}
+  kingdom: 1
+  species: 1
   adjacencyRadius: 75
   maxAdjRadius: 75
   adjRadActive: 0
@@ -105,12 +107,12 @@ MonoBehaviour:
   growthStep: 0
   growth: 1
   colliders:
-  - {fileID: 4382113466650385353}
   - {fileID: 1515349841372426071}
   invalidPlaceMaterials:
   - {fileID: 2100000, guid: 48c504a3145744e41bec8db25d27861d, type: 2}
   - {fileID: 2100000, guid: 13d41cc7a6de3854da941b78f41eb465, type: 2}
   placing: 0
+  validPlacement: 0
   resourceDrain: 0
 --- !u!1 &7462374074603472418
 GameObject:
@@ -263,7 +265,6 @@ GameObject:
   - component: {fileID: 5126690750061836453}
   - component: {fileID: 3216264888985823317}
   - component: {fileID: 2959118964732448978}
-  - component: {fileID: 4382113466650385353}
   m_Layer: 10
   m_Name: AdjacencyPlane
   m_TagString: Untagged
@@ -336,16 +337,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &4382113466650385353
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8646818959762604073}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 5
-  m_Center: {x: 0, y: 0, z: 0}

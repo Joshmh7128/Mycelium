@@ -42,7 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7462374072571647686}
   - component: {fileID: 7462374072571647687}
-  - component: {fileID: 2962578336953211526}
+  - component: {fileID: 8981978949248321818}
   m_Layer: 9
   m_Name: Mycorrhiza
   m_TagString: Untagged
@@ -79,7 +79,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9ff18ad0aea6d64ea27946a19bfa6b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2962578336953211526
+--- !u!114 &8981978949248321818
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,20 +97,22 @@ MonoBehaviour:
   adjacencyPlane: {fileID: 8646818959762604073}
   planeMaterials:
   - {fileID: 2100000, guid: b1f023a4f38fdaa4eb84b3b98b7e05c1, type: 2}
-  adjacencyRadius: 5
-  maxAdjRadius: 10
+  kingdom: 1
+  species: 2
+  adjacencyRadius: 30
+  maxAdjRadius: 30
   adjRadActive: 0
   adjacentNodes: []
   growthRate: 0
   growthStep: 0
-  growth: 0
+  growth: 1
   colliders:
-  - {fileID: 6591415804327187553}
   - {fileID: 1515349841372426071}
   invalidPlaceMaterials:
   - {fileID: 2100000, guid: 091c33846a05df54a840e0e18d66c337, type: 2}
   - {fileID: 2100000, guid: 57f870d24d826224197b105dec2b8c08, type: 2}
   placing: 0
+  validPlacement: 0
 --- !u!1 &7462374074603472418
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,14 +140,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7462374074603472418}
-  m_LocalRotation: {x: -0, y: 0.7071068, z: -0.7071068, w: 0}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 4.5, z: 0}
   m_LocalScale: {x: 1, y: 1.0000001, z: 1.0000001}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6223200643764790776}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 90, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!33 &7462374074603472425
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -207,7 +209,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 10.000006, y: 0.0000023841862, z: 10.000002}
+  m_Size: {x: 9, y: 1, z: 9}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!227 &7462374074603472428
 BillboardRenderer:
@@ -262,7 +264,6 @@ GameObject:
   - component: {fileID: 5126690750061836453}
   - component: {fileID: 3216264888985823317}
   - component: {fileID: 2959118964732448978}
-  - component: {fileID: 6591415804327187553}
   m_Layer: 10
   m_Name: AdjacencyPlane
   m_TagString: Untagged
@@ -335,16 +336,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &6591415804327187553
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8646818959762604073}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 5
-  m_Center: {x: 0, y: 0, z: 0}
