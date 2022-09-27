@@ -110,14 +110,14 @@ public class PA_PlayerController : MonoBehaviour
     }
 
     public void BuyMycelium() { 
-        if (carbonStores > 25) {
+        if (carbonStores >= 25) {
             carbonStores -= 25;
             purchasedNode = Instantiate(myceliumPrefab, mousePos, Quaternion.identity, nodeManager.transform).GetComponent<PA_Placeable>();
             StartCoroutine(DelayCall());
         }
     } 
     public void BuyMycorrhiza() { 
-        if (carbonStores > 25) {
+        if (carbonStores >= 25) {
             carbonStores -= 25;
             purchasedNode = Instantiate(mycorrhizaPrefab, mousePos, Quaternion.identity, nodeManager.transform).GetComponent<PA_Placeable>();
             StartCoroutine(DelayCall());

@@ -51,8 +51,9 @@ public class PA_NodeManager : MonoBehaviour
         PA_AdjacencyNode newNode = Instantiate(plantPrefab, 
             new Vector3(Random.Range(-spawnRadius, spawnRadius), 0, Random.Range(-spawnRadius, spawnRadius)), 
             Quaternion.identity, transform).GetComponent<PA_AdjacencyNode>();
+        // coroutine needs to be run on a delay as a buffer for instantiation to complete
         StartCoroutine(DelayToggle(newNode));
-        return newNode.GetComponent<PA_AdjacencyNode>();
+        return newNode;
     }
 
     IEnumerator DelayToggle(PA_AdjacencyNode node) {
@@ -60,6 +61,7 @@ public class PA_NodeManager : MonoBehaviour
         if (plantDisplayActive) node.ToggleRadiusDisplay(true);
     }
 
+    #region // button functions
     public void TogglePlantRadiusDisplay() {
         plantDisplayActive = !plantDisplayActive;
         foreach (PA_AdjacencyNode node in plantNodes) {
@@ -74,4 +76,5 @@ public class PA_NodeManager : MonoBehaviour
                 node.ToggleRadiusDisplay(fungusDisplayActive);
         }
     }
+    #endregion
 }
