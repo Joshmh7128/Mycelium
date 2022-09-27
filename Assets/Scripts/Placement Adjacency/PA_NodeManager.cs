@@ -15,8 +15,10 @@ public class PA_NodeManager : MonoBehaviour
     public GameObject plantPrefab;
 
     public List<PA_AdjacencyNode> plantNodes = new List<PA_AdjacencyNode>();
-    public bool displayActive;
+    public bool plantDisplayActive;
+   
     public List<PA_AdjacencyNode> fungusNodes = new List<PA_AdjacencyNode>();
+    public bool fungusDisplayActive;
 
     [SerializeField] float spawnRadius;
 
@@ -26,7 +28,7 @@ public class PA_NodeManager : MonoBehaviour
 
     private void Start()
     {
-        displayActive = false;
+        plantDisplayActive = false;
         spawnInterval = Random.Range(spawnIntervalRange.x, spawnIntervalRange.y);
         StartCoroutine(WaitToSpawn());
     }
@@ -49,15 +51,27 @@ public class PA_NodeManager : MonoBehaviour
         PA_AdjacencyNode newNode = Instantiate(plantPrefab, 
             new Vector3(Random.Range(-spawnRadius, spawnRadius), 0, Random.Range(-spawnRadius, spawnRadius)), 
             Quaternion.identity, transform).GetComponent<PA_AdjacencyNode>();
-        if (displayActive) newNode.ToggleRadiusDisplay();
+        StartCoroutine(DelayToggle(newNode));
         return newNode.GetComponent<PA_AdjacencyNode>();
     }
 
+    IEnumerator DelayToggle(PA_AdjacencyNode node) {
+        yield return new WaitForEndOfFrame();
+        if (plantDisplayActive) node.ToggleRadiusDisplay(true);
+    }
+
     public void TogglePlantRadiusDisplay() {
-        displayActive = !displayActive;
-        foreach (PA_PlantNode node in plantNodes) {
-            if (node.adjRadActive != displayActive)
-                node.ToggleRadiusDisplay();
+        plantDisplayActive = !plantDisplayActive;
+        foreach (PA_AdjacencyNode node in plantNodes) {
+            if (node.adjRadActive != plantDisplayActive)
+                node.ToggleRadiusDisplay(plantDisplayActive);
+        }
+    } 
+    public void ToggleFungusRadiusDisplay() {
+        fungusDisplayActive = !fungusDisplayActive;
+        foreach (PA_AdjacencyNode node in fungusNodes) {
+            if (node.adjRadActive != fungusDisplayActive)
+                node.ToggleRadiusDisplay(fungusDisplayActive);
         }
     }
 }

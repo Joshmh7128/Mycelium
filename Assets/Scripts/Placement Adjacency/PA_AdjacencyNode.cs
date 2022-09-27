@@ -30,19 +30,14 @@ public class PA_AdjacencyNode : MonoBehaviour
 
         gfxMR = gfx.GetComponentInChildren<MeshRenderer>();
         planeMR = adjacencyPlane.GetComponent<MeshRenderer>();
+        ToggleRadiusDisplay(false);
 
         adjacencyPlane.transform.localScale = new Vector3(adjacencyRadius / 5, 1, adjacencyRadius / 5);
     }
 
-    public void ToggleRadiusDisplay() {
-        if (adjRadActive) {
-            planeMR.enabled = false;
-            adjRadActive = false;
-            }
-        else {
-            planeMR.enabled = true;
-            adjRadActive = true;
-        }
+    public void ToggleRadiusDisplay(bool state) {
+            planeMR.enabled = state;
+            adjRadActive = state;
     }
 
     protected virtual void UpdateGFX() {       

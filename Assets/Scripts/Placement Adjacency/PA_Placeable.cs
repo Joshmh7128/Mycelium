@@ -34,13 +34,13 @@ public class PA_Placeable : PA_AdjacencyNode
 
     IEnumerator WhilePlacing() {
         yield return new WaitForEndOfFrame();
-        ToggleRadiusDisplay();
+        ToggleRadiusDisplay(true);
         while (placing)
         {
             yield return new WaitForEndOfFrame();
             ToggleValidVisuals();
         }
-        ToggleRadiusDisplay();
+        ToggleRadiusDisplay(false);
     }
 
     void ToggleValidVisuals() { 

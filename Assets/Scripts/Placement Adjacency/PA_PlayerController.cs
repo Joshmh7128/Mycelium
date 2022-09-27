@@ -32,6 +32,7 @@ public class PA_PlayerController : MonoBehaviour
 
     //Purchasables
     public GameObject myceliumPrefab;
+    public GameObject mycorrhizaPrefab;
 
     //Currency
     public float carbonStores;
@@ -88,15 +89,15 @@ public class PA_PlayerController : MonoBehaviour
     void ToggleMouseOver(bool state)
     {
         if (state) { 
-            if (!mousedNode.adjRadActive) mousedNode.ToggleRadiusDisplay();
+            mousedNode.ToggleRadiusDisplay(state);
         }
         else {
-            if (mousedNode) { 
-                if (!nodeManager.displayActive) {
-                    mousedNode.ToggleRadiusDisplay();
-                    mousedNode = null;
-                
+            if (mousedNode) {
+                if ((!nodeManager.plantDisplayActive && mousedNode.GetComponent<PA_PlantNode>()) 
+                    || (!nodeManager.fungusDisplayActive && mousedNode.GetComponent<PA_Placeable>())) {
+                    mousedNode.ToggleRadiusDisplay(state);       
                 }
+                mousedNode = null;
             }
         }
     }
@@ -112,8 +113,20 @@ public class PA_PlayerController : MonoBehaviour
         if (carbonStores > 25) {
             carbonStores -= 25;
             purchasedNode = Instantiate(myceliumPrefab, mousePos, Quaternion.identity, nodeManager.transform).GetComponent<PA_Placeable>();
-            purchasedNode.Place();
+            StartCoroutine(DelayCall());
         }
+    } 
+    public void BuyMycorrhiza() { 
+        if (carbonStores > 25) {
+            carbonStores -= 25;
+            purchasedNode = Instantiate(mycorrhizaPrefab, mousePos, Quaternion.identity, nodeManager.transform).GetComponent<PA_Placeable>();
+            StartCoroutine(DelayCall());
+        }
+    }
+
+    IEnumerator DelayCall() {
+        yield return new WaitForFixedUpdate();
+        purchasedNode.Place();
     }
 
     public void RefundPurchase() {
