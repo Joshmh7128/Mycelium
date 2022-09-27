@@ -8,6 +8,16 @@ public class LayerCameraController : MonoBehaviour
     /// it moves to the layer based off of player inputs
     /// it turns off the layers that we're not using
     /// 
+    public static LayerCameraController instance;
+    private void Awake()
+    {
+        if (LayerCameraController.instance != null)
+        {
+            Debug.Log("Warning! More than one instance of LayerCameraController found!");
+            return;
+        } else
+        LayerCameraController.instance = this;
+    }
 
     // target layers
     [SerializeField] List<GameObject> layers; // our layers
@@ -15,7 +25,7 @@ public class LayerCameraController : MonoBehaviour
     [SerializeField] int targetLayerInt; // the current layer we're working on
     [SerializeField] float moveSpeed, lerpSpeed; // how fast we move from layer to layer
     bool is2D;
-    [SerializeField] Vector3 targetRot, targetPos;
+    [SerializeField] public Vector3 targetRot, targetPos;
     [SerializeField] float yRot, yRotIncrement, zoom, zoomSpeed; // our target y rotation
 
     private void Start()
@@ -131,6 +141,10 @@ public class LayerCameraController : MonoBehaviour
                 layers[i].SetActive(true);
             }
         }
+    }
+
+    public void CenterPoint(Vector3 pos) {
+        targetPos = pos;
     }
 
     // swap 2d
