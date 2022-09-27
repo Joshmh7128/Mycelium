@@ -31,7 +31,7 @@ public class PA_AdjacencyNode : MonoBehaviour
         gfxMR = gfx.GetComponentInChildren<MeshRenderer>();
         planeMR = adjacencyPlane.GetComponent<MeshRenderer>();
         ToggleRadiusDisplay(false);
-
+        // dividing by 5 because the plane mesh is 5 units long instead of 1 unit long
         adjacencyPlane.transform.localScale = new Vector3(adjacencyRadius / 5, 1, adjacencyRadius / 5);
     }
 
@@ -41,8 +41,9 @@ public class PA_AdjacencyNode : MonoBehaviour
     }
 
     protected virtual void UpdateGFX() {       
-            gfx.transform.localScale = new Vector3(growth, growth, growth);
-            adjacencyPlane.transform.localScale = new Vector3(adjacencyRadius / 5, 1, adjacencyRadius / 5);
+        gfx.transform.localScale = new Vector3(growth, growth, growth);
+        // dividing by 5 because the plane mesh is 5 units long instead of 1 unit long
+        adjacencyPlane.transform.localScale = new Vector3(adjacencyRadius / 5, 1, adjacencyRadius / 5);
     }
 
     private void OnDrawGizmos()
