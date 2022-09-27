@@ -20,6 +20,8 @@ public class PA_NodeManager : MonoBehaviour
     public List<PA_AdjacencyNode> fungusNodes = new List<PA_AdjacencyNode>();
     public bool fungusDisplayActive;
 
+    public List<PA_AdjacencyNode> adjacencyNodes = new List<PA_AdjacencyNode>(); // for ALL nodes
+
     [SerializeField] float spawnRadius;
 
     public float spawnTime;
@@ -35,17 +37,17 @@ public class PA_NodeManager : MonoBehaviour
 
     IEnumerator WaitToSpawn() {
         if (spawnTime < spawnInterval) {
-            yield return new WaitForEndOfFrame();
-            spawnTime += Time.deltaTime;
-            StartCoroutine(WaitToSpawn());
+            yield return new WaitForFixedUpdate();
+            spawnTime += Time.fixedDeltaTime;
         } else {
-            yield return new WaitForEndOfFrame();
-            plantNodes.Add(SpawnPlantNode());
+            yield return new WaitForFixedUpdate();
+            PA_AdjacencyNode node = SpawnPlantNode();
+            plantNodes.Add(node);
+            adjacencyNodes.Add(node);
             spawnTime = 0;
-            StartCoroutine(WaitToSpawn());      
         }
+        StartCoroutine(WaitToSpawn());
     }
-
 
     PA_AdjacencyNode SpawnPlantNode() {
         PA_AdjacencyNode newNode = Instantiate(plantPrefab, 

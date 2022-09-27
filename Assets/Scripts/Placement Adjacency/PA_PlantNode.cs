@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PA_PlantNode : PA_AdjacencyNode
 {
-    PA_NodeManager nodeManager;
     Vector3 billboardOffset = new Vector3(2.9f, 0, 0);
 
     public enum PlantStage { Sappling, Grown, Decaying }
@@ -23,9 +22,6 @@ public class PA_PlantNode : PA_AdjacencyNode
     protected override void Start()
     {
         base.Start();
-
-        if (PA_NodeManager.instance) nodeManager = PA_NodeManager.instance;
-
         progressRate = 1;
         currentLifetime = 0;
         expectedLifetime = Random.Range(lifetimeRange.x, lifetimeRange.y);
@@ -96,6 +92,15 @@ public class PA_PlantNode : PA_AdjacencyNode
 
     void Decompose() {
         nodeManager.plantNodes.Remove(this);
+        nodeManager.adjacencyNodes.Remove(this);
+
+        // check all other adjacency nodes and remove this from their list of adjacent nodes
+        foreach (var node in adjacentNodes)
+        {
+            if (node.adjacentNodes.Contains(this))
+            node.adjacentNodes.Remove(this);
+        }
+
         Destroy(this.gameObject);
     } 
 

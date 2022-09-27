@@ -105,6 +105,7 @@ public class PA_PlayerController : MonoBehaviour
     public void PlaceNode() {
 
         nodeManager.fungusNodes.Add(purchasedNode);
+        nodeManager.adjacencyNodes.Add(purchasedNode); // also add to the master list so we can access via adjacency check
         purchasedNode.ConfirmPlace();
         purchasedNode = null;
     }
