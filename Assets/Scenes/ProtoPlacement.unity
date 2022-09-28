@@ -727,7 +727,8 @@ MonoBehaviour:
   fungusNodes:
   - {fileID: 769453017}
   fungusDisplayActive: 0
-  adjacencyNodes: []
+  adjacencyNodes:
+  - {fileID: 769453017}
   spawnRadius: 250
   spawnTime: 0
   spawnInterval: 0
@@ -1087,7 +1088,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mousePos: {x: 0, y: 0, z: 0}
-  placementValid: 0
   myceliumPrefab: {fileID: 7462374072571647684, guid: 90a636aec7832e046953048ea0ceb023, type: 3}
   mycorrhizaPrefab: {fileID: 7462374072571647684, guid: 42ca5eb96ff714d428c80fc2cb8dec13, type: 3}
   carbonStores: 200

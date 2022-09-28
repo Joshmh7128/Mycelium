@@ -34,7 +34,7 @@ public class PA_PlayerController : MonoBehaviour
     public GameObject mycorrhizaPrefab;
 
     //Currency
-    public float carbonStores;
+    public float nutrientStores;
 
     void Start() {
         if (PA_NodeManager.instance) nodeManager = PA_NodeManager.instance;
@@ -56,8 +56,8 @@ public class PA_PlayerController : MonoBehaviour
                 if (hit.transform.GetComponentInParent<PA_AdjacencyNode>() != mousedNode) ToggleMouseOver(false);
                 mousedNode = hit.transform.GetComponentInParent<PA_AdjacencyNode>();
                 ToggleMouseOver(true);
-                if (Input.GetMouseButton(0)) {
-                    cameraController.CenterPoint(hit.collider.gameObject.transform.position);
+                if (Input.GetMouseButtonDown(0)) {
+                    cameraController.CenterPoint(hit.collider.gameObject.transform.parent.position);
                 }
             }
             else {
@@ -66,12 +66,12 @@ public class PA_PlayerController : MonoBehaviour
 
             if (purchasedNode) {
                 purchasedNode.transform.position = mousePos;
-                if (Input.GetMouseButton(0) && purchasedNode.validPlacement)
+                if (Input.GetMouseButtonDown(0) && purchasedNode.validPlacement)
                 {
                     purchasedNode.placing = false;
                     PlaceNode();
                 }
-                else if (Input.GetMouseButton(1))
+                else if (Input.GetMouseButtonDown(1))
                 {
                     purchasedNode.placing = false;
                 
@@ -108,17 +108,17 @@ public class PA_PlayerController : MonoBehaviour
     }
 
     public void BuyMycelium() {
-        if (carbonStores >= 25) {
+        if (nutrientStores >= 25) {
             if (purchasedNode) RefundPurchase();
-            carbonStores -= 25;
+            nutrientStores -= 25;
             purchasedNode = Instantiate(myceliumPrefab, mousePos, Quaternion.identity, nodeManager.transform).GetComponent<PA_Placeable>();
             StartCoroutine(DelayCall());
         }
     } 
     public void BuyMycorrhiza() { 
-        if (carbonStores >= 25) {
+        if (nutrientStores >= 25) {
             if (purchasedNode) RefundPurchase();
-            carbonStores -= 25;
+            nutrientStores -= 25;
             purchasedNode = Instantiate(mycorrhizaPrefab, mousePos, Quaternion.identity, nodeManager.transform).GetComponent<PA_Placeable>();
             StartCoroutine(DelayCall());
         }
@@ -132,8 +132,14 @@ public class PA_PlayerController : MonoBehaviour
 
     public void RefundPurchase() {
         Destroy(purchasedNode.gameObject);
-        carbonStores += 25;
+        nutrientStores += 25;
         nodeManager.ToggleFungusRadiusDisplay();
         purchasedNode = null;
+    }
+
+    public void HarvestNutrients() { 
+        foreach (PA_AdjacencyNode node in nodeManager.fungusNodes) {
+            nutrientStores += node.growthRate;
+        }
     }
 }

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PA_AdjacencyNode : MonoBehaviour
 {
+    protected PA_PlayerController playerController;
+    protected PA_NodeManager nodeManager; // our instanced node manager
+
     [Header("~~~ GFX Refs ~~~")]
     [SerializeField] protected GameObject gfx;
     protected MeshRenderer gfxMR;
@@ -22,10 +25,11 @@ public class PA_AdjacencyNode : MonoBehaviour
     public bool adjRadActive;
     public List<PA_AdjacencyNode> adjacentNodes;
 
-    protected PA_NodeManager nodeManager; // our instanced node manager
-
-
     [Header("~~~ Growth Factors ~~~")]
+    [SerializeField] protected Vector2 lifetimeRange;
+    public float lifetimeModifier;
+    [SerializeField] protected Vector2 decayTimeRange;
+
     [Range(0, 1)]
     public float growthRate;
     [SerializeField] protected float growthStep;
@@ -41,6 +45,7 @@ public class PA_AdjacencyNode : MonoBehaviour
 
         // get our nodemanager
         nodeManager = PA_NodeManager.instance;
+        playerController = PA_PlayerController.instance;
     }
 
     public void ToggleRadiusDisplay(bool state) {
@@ -85,15 +90,30 @@ public class PA_AdjacencyNode : MonoBehaviour
             if (radii >= Vector3.Distance(transform.position, node.transform.position))
             {
                 if (!adjacentNodes.Contains(node) && node != this)
-                adjacentNodes.Add(node);
+                {
+                    adjacentNodes.Add(node);
+                    ProvideBenefit(node);
+                }
             }
-            else /// check to remove nodes
+            /// check to remove nodes
+            else
             {   // run the opposite check but see if that node exists in our list
                 if (adjacentNodes.Contains(node))
-                adjacentNodes.Remove(node);
+                {
+                    adjacentNodes.Remove(node);
+                    RemoveBenefit(node);
+                }
             }
 
 
         }
+    }
+    
+    protected virtual void ProvideBenefit(PA_AdjacencyNode node) { 
+        
+    }
+
+    protected virtual void RemoveBenefit(PA_AdjacencyNode node) { 
+    
     }
 }

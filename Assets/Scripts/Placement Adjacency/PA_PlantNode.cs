@@ -9,11 +9,9 @@ public class PA_PlantNode : PA_AdjacencyNode
     public enum PlantStage { Sappling, Grown, Decaying }
     public PlantStage stage;
 
-    [SerializeField] Vector2 lifetimeRange;
-    [SerializeField] Vector2 decayTimeRange;
 
-    [SerializeField] float currentLifetime;
-    [SerializeField] float expectedLifetime;
+    [SerializeField] protected float currentLifetime;
+    [SerializeField] protected float expectedLifetime;
 
     [Range(0, 1)]
     public float progressRate;
@@ -22,9 +20,10 @@ public class PA_PlantNode : PA_AdjacencyNode
     protected override void Start()
     {
         base.Start();
+        lifetimeModifier = 1;
         progressRate = 1;
         currentLifetime = 0;
-        expectedLifetime = Random.Range(lifetimeRange.x, lifetimeRange.y);
+        expectedLifetime = Random.Range(lifetimeRange.x + (int)lifetimeModifier, lifetimeRange.y + (int)lifetimeModifier);
 
         growthRate = (float)Random.Range(0, 100) / 100f;
         growth = 1;
@@ -119,6 +118,22 @@ public class PA_PlantNode : PA_AdjacencyNode
         } else {
             gfxMR.material = gfxMaterials[0];
             planeMR.material = planeMaterials[0];
+        }
+    }
+
+    protected override void ProvideBenefit(PA_AdjacencyNode node)
+    {
+        if (node.kingdom == PA_Taxonomy.Kingdom.Plant) {
+            node.lifetimeModifier *= 1.1f;
+        }
+        if (node.kingdom == PA_Taxonomy.Kingdom.Fungi) {
+            node = node.GetComponent<PA_Placeable>();
+        }
+    }
+    protected override void RemoveBenefit(PA_AdjacencyNode node)
+    {
+        if (node.kingdom == PA_Taxonomy.Kingdom.Plant) {
+            node.lifetimeModifier /= 1.1f;
         }
     }
 }
