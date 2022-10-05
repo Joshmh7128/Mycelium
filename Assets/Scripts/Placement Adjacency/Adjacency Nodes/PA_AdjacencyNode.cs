@@ -44,12 +44,6 @@ public class PA_AdjacencyNode : MonoBehaviour
     public enum NodeStage { Growing, Sustaining, Decaying }
     public NodeStage stage;
 
-    
-
-
-
-
-
     protected virtual void Start() {
         // get instanced refs
         if (PA_NodeManager.instance) nodeManager = PA_NodeManager.instance;
@@ -68,10 +62,10 @@ public class PA_AdjacencyNode : MonoBehaviour
     }
 
     #region --- ADJACENCY FUNCTIONS ---
-    // check to see if we are overlapping with any nodes
+    // check to see if we are overlapping with any nodes    
     protected virtual IEnumerator AdjacencyCheck()
     {
-        yield return new WaitForFixedUpdate();
+        yield return new WaitForSecondsRealtime(1/10);
         // loop through all nodes
         foreach (PA_AdjacencyNode node in nodeManager.adjacencyNodes) {
             // compare sum of two node's radius to their distance apart
