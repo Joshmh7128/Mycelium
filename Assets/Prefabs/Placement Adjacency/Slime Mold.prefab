@@ -42,9 +42,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7462374072571647686}
   - component: {fileID: 7462374072571647687}
-  - component: {fileID: 8981978949248321818}
+  - component: {fileID: 2383776318167620466}
   m_Layer: 9
-  m_Name: Mycorrhiza
+  m_Name: Slime Mold
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -79,7 +79,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9ff18ad0aea6d64ea27946a19bfa6b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8981978949248321818
+--- !u!114 &2383776318167620466
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -88,37 +88,37 @@ MonoBehaviour:
   m_GameObject: {fileID: 7462374072571647684}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9bf3b2436f0d3f45a86720ad385f466, type: 3}
+  m_Script: {fileID: 11500000, guid: 48f63392a6c7397438898db23398b893, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gfx: {fileID: 2593244358730430712}
   gfxMaterials:
-  - {fileID: 2100000, guid: c15e00daf074285489a5e4e70151a063, type: 2}
+  - {fileID: 2100000, guid: a23086c81a26d424791eccf4a1a3ba33, type: 2}
   adjacencyPlane: {fileID: 8646818959762604073}
   planeMaterials:
   - {fileID: 2100000, guid: b1f023a4f38fdaa4eb84b3b98b7e05c1, type: 2}
   kingdom: 1
-  species: 2
+  species: 3
   adjacencyRadius: 15
   maxAdjRadius: 15
   adjRadActive: 0
   adjacentNodes: []
   timeTick: 0.12
-  lifetimeRange: {x: 20, y: 60}
+  lifetimeRange: {x: 1, y: 5}
   currentLifetime: 0
   expectedLifetime: 0
-  growth: 1
+  growth: 1.5
   growthRate: 0
-  maxGrowth: 4
+  maxGrowth: 2
   growthStep: 0
   stage: 0
-  storage: 15
-  consumption: 0.3
-  cost: 20
+  storage: 10
+  consumption: 0.15
+  cost: 10
   colliders:
   - {fileID: 1515349841372426071}
   invalidPlaceMaterials:
-  - {fileID: 2100000, guid: 091c33846a05df54a840e0e18d66c337, type: 2}
+  - {fileID: 2100000, guid: 88b184009f0f45641ad0a9ae4c7ac711, type: 2}
   - {fileID: 2100000, guid: 57f870d24d826224197b105dec2b8c08, type: 2}
   placing: 0
   validPlacement: 0
@@ -185,7 +185,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c15e00daf074285489a5e4e70151a063, type: 2}
+  - {fileID: 2100000, guid: a23086c81a26d424791eccf4a1a3ba33, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

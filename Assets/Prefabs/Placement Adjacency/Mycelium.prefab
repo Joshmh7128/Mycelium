@@ -96,21 +96,30 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 3016943fcd7c9ab4986ebe68da6ec8f3, type: 2}
   adjacencyPlane: {fileID: 8646818959762604073}
   planeMaterials:
-  - {fileID: 2100000, guid: ee8ecbdadf9419e4a8174ce41f5b5a2f, type: 2}
+  - {fileID: 2100000, guid: b1f023a4f38fdaa4eb84b3b98b7e05c1, type: 2}
   kingdom: 1
   species: 1
-  adjacencyRadius: 75
-  maxAdjRadius: 75
+  adjacencyRadius: 35
+  maxAdjRadius: 35
   adjRadActive: 0
   adjacentNodes: []
-  growthRate: 0
-  growthStep: 0
+  timeTick: 0.12
+  lifetimeRange: {x: 20, y: 60}
+  currentLifetime: 0
+  expectedLifetime: 0
   growth: 1
+  growthRate: 0
+  maxGrowth: 3
+  growthStep: 0
+  stage: 0
+  storage: 5
+  consumption: 0.125
+  cost: 5
   colliders:
   - {fileID: 1515349841372426071}
   invalidPlaceMaterials:
   - {fileID: 2100000, guid: 48c504a3145744e41bec8db25d27861d, type: 2}
-  - {fileID: 2100000, guid: 13d41cc7a6de3854da941b78f41eb465, type: 2}
+  - {fileID: 2100000, guid: 57f870d24d826224197b105dec2b8c08, type: 2}
   placing: 0
   validPlacement: 0
   resourceDrain: 0

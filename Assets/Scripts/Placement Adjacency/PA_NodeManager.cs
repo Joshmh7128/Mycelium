@@ -14,10 +14,11 @@ public class PA_NodeManager : MonoBehaviour
 
     public GameObject plantPrefab;
 
+    public int maxPlantNodes;
     public List<PA_AdjacencyNode> plantNodes = new List<PA_AdjacencyNode>();
     public bool plantDisplayActive;
    
-    public List<PA_AdjacencyNode> fungusNodes = new List<PA_AdjacencyNode>();
+    public  List<PA_AdjacencyNode> fungusNodes = new List<PA_AdjacencyNode>();
     public bool fungusDisplayActive;
 
     public List<PA_AdjacencyNode> adjacencyNodes = new List<PA_AdjacencyNode>(); // for ALL nodes
@@ -36,16 +37,17 @@ public class PA_NodeManager : MonoBehaviour
     }
 
     IEnumerator WaitToSpawn() {
-        if (spawnTime < spawnInterval) {
-            yield return new WaitForFixedUpdate();
-            spawnTime += Time.fixedDeltaTime;
-        } else {
-            yield return new WaitForFixedUpdate();
-            PA_AdjacencyNode node = SpawnPlantNode();
-            plantNodes.Add(node);
-            adjacencyNodes.Add(node);
-            spawnTime = 0;
+        if (plantNodes.Count < maxPlantNodes) { 
+            if (spawnTime < spawnInterval) {
+                spawnTime += Time.fixedDeltaTime;
+            } else {
+                PA_AdjacencyNode node = SpawnPlantNode();
+                plantNodes.Add(node);
+                adjacencyNodes.Add(node);
+                spawnTime = 0;
+            }
         }
+        yield return new WaitForFixedUpdate();
         StartCoroutine(WaitToSpawn());
     }
 
@@ -65,17 +67,23 @@ public class PA_NodeManager : MonoBehaviour
 
     #region // button functions
     public void TogglePlantRadiusDisplay() {
-        plantDisplayActive = !plantDisplayActive;
+        SetPlantRadiusDisplay(!plantDisplayActive);
+    }
+    public void SetPlantRadiusDisplay(bool state) {
+        plantDisplayActive = state;
         foreach (PA_AdjacencyNode node in plantNodes) {
-            if (node.adjRadActive != plantDisplayActive)
-                node.ToggleRadiusDisplay(plantDisplayActive);
+            if (node.adjRadActive != state)
+                node.ToggleRadiusDisplay(state);
         }
     } 
     public void ToggleFungusRadiusDisplay() {
-        fungusDisplayActive = !fungusDisplayActive;
+        SetFungusRadiusDisplay(!fungusDisplayActive);
+    }
+    public void SetFungusRadiusDisplay(bool state) {
+        fungusDisplayActive = state;
         foreach (PA_AdjacencyNode node in fungusNodes) {
-            if (node.adjRadActive != fungusDisplayActive)
-                node.ToggleRadiusDisplay(fungusDisplayActive);
+            if (node.adjRadActive != state)
+                node.ToggleRadiusDisplay(state);
         }
     }
     #endregion

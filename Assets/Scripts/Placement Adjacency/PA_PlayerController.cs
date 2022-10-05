@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PA_PlayerController : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class PA_PlayerController : MonoBehaviour
 
     //Class refs
     PA_NodeManager nodeManager;
+    PA_FungusManager fungusManager;
+    bool prevDisplayToggle;
     LayerCameraController cameraController;
 
     //Layer masks
@@ -25,19 +28,23 @@ public class PA_PlayerController : MonoBehaviour
     //Mouse input refs
     [SerializeField] Vector3 mousePos;
     PA_AdjacencyNode mousedNode;
+    PA_AdjacencyNode selectedNode;
 
     //Placement state refs
-    PA_Placeable purchasedNode;
+    PA_PlayerNode purchasedNode;
 
     //Purchasables
-    public GameObject myceliumPrefab;
-    public GameObject mycorrhizaPrefab;
+    public GameObject[] playerNodePrefabs;
 
-    //Currency
-    public float nutrientStores;
+    //Scene refs
+    [SerializeField] Slider costSlider;
+    [SerializeField] Text costText;
+
+
 
     void Start() {
         if (PA_NodeManager.instance) nodeManager = PA_NodeManager.instance;
+        if (PA_FungusManager.instance) fungusManager = PA_FungusManager.instance;
         if (LayerCameraController.instance) cameraController = LayerCameraController.instance;
     }
 
@@ -49,15 +56,20 @@ public class PA_PlayerController : MonoBehaviour
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, placementMask))
             {
                 mousePos = hit.point;
+
             }
-             
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, mouseOverMask))
-            {
+            //if cursor is hovering over a node
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, mouseOverMask)) {
+                //if mouse leaves one node directly onto another, disable the first's radius display
                 if (hit.transform.GetComponentInParent<PA_AdjacencyNode>() != mousedNode) ToggleMouseOver(false);
+                //set mousedNode to node beneath cursor
                 mousedNode = hit.transform.GetComponentInParent<PA_AdjacencyNode>();
-                ToggleMouseOver(true);
+                ToggleMouseOver(true); //toggle radius display
+                //left click input
                 if (Input.GetMouseButtonDown(0)) {
+                    //center camera on point
                     cameraController.CenterPoint(hit.collider.gameObject.transform.parent.position);
+                    //display stats for node
                 }
             }
             else {
@@ -66,6 +78,13 @@ public class PA_PlayerController : MonoBehaviour
 
             if (purchasedNode) {
                 purchasedNode.transform.position = mousePos;
+
+                costSlider.gameObject.SetActive(true);
+                costText.gameObject.SetActive(true);
+                costSlider.value = purchasedNode.cost;
+                costSlider.maxValue = fungusManager.nutrientTotal;
+                costText.text = "-" + purchasedNode.cost;
+
                 if (Input.GetMouseButtonDown(0) && purchasedNode.validPlacement)
                 {
                     purchasedNode.placing = false;
@@ -74,72 +93,93 @@ public class PA_PlayerController : MonoBehaviour
                 else if (Input.GetMouseButtonDown(1))
                 {
                     purchasedNode.placing = false;
-                
-                    RefundPurchase();
+                    CancelPlace();
+                }              
+            }
+        }
+
+    }
+
+    void ToggleMouseOver(bool state) {
+        //enable mouse over
+        if (state) { 
+            mousedNode.ToggleRadiusDisplay(state);
+            //left control shows all nodes in this node's network
+            if (Input.GetKey(KeyCode.LeftControl)) {
+                foreach(PA_AdjacencyNode node in mousedNode.adjacentNodes) { 
+                    if (node)
+                        node.ToggleRadiusDisplay(state);   
+                }
+            //release of left control disables network view
+            } else if (Input.GetKeyUp(KeyCode.LeftControl)) { 
+                foreach (PA_AdjacencyNode node in mousedNode.adjacentNodes) {              
+                    if (node.kingdom == PA_Taxonomy.Kingdom.Plant)
+                        node.ToggleRadiusDisplay(nodeManager.plantDisplayActive);
+                    if (node.kingdom == PA_Taxonomy.Kingdom.Fungi)
+                        node.ToggleRadiusDisplay(nodeManager.fungusDisplayActive);
                 }
             }
         }
-    }
-
-
-    void ToggleMouseOver(bool state)
-    {
-        if (state) { 
-            mousedNode.ToggleRadiusDisplay(state);
-        }
+        //disable mouse over
         else {
             if (mousedNode) {
-                if ((!nodeManager.plantDisplayActive && mousedNode.GetComponent<PA_PlantNode>()) 
-                    || (!nodeManager.fungusDisplayActive && mousedNode.GetComponent<PA_Placeable>())) {
-                    mousedNode.ToggleRadiusDisplay(state);       
-                }
+                if (mousedNode.kingdom == PA_Taxonomy.Kingdom.Plant)
+                    mousedNode.ToggleRadiusDisplay(nodeManager.plantDisplayActive);
+                if (mousedNode.kingdom == PA_Taxonomy.Kingdom.Fungi)
+                    mousedNode.ToggleRadiusDisplay(nodeManager.fungusDisplayActive);
+
+                foreach (PA_AdjacencyNode node in mousedNode.adjacentNodes) {
+                    if (node.kingdom == PA_Taxonomy.Kingdom.Plant)
+                        node.ToggleRadiusDisplay(nodeManager.plantDisplayActive);
+                    if (node.kingdom == PA_Taxonomy.Kingdom.Fungi)
+                        node.ToggleRadiusDisplay(nodeManager.fungusDisplayActive);
+
+                } 
                 mousedNode = null;
             }
         }
     }
 
     public void PlaceNode() {
-
+        fungusManager.nutrientTotal -= purchasedNode.cost;
         nodeManager.fungusNodes.Add(purchasedNode);
         nodeManager.adjacencyNodes.Add(purchasedNode); // also add to the master list so we can access via adjacency check
         purchasedNode.ConfirmPlace();
-        nodeManager.ToggleFungusRadiusDisplay();
+        nodeManager.SetFungusRadiusDisplay(prevDisplayToggle);
         purchasedNode = null;
+        costSlider.gameObject.SetActive(false);
+        costText.gameObject.SetActive(false);
     }
 
-    public void BuyMycelium() {
-        if (nutrientStores >= 25) {
-            if (purchasedNode) RefundPurchase();
-            nutrientStores -= 25;
-            purchasedNode = Instantiate(myceliumPrefab, mousePos, Quaternion.identity, nodeManager.transform).GetComponent<PA_Placeable>();
+    public void BuyNode(int index) {
+        if (fungusManager.nutrientTotal >= playerNodePrefabs[index].GetComponent<PA_PlayerNode>().cost) {
+            if (purchasedNode) CancelPlace();
+           
+            purchasedNode = Instantiate(playerNodePrefabs[index], mousePos, 
+                            Quaternion.identity, nodeManager.transform).GetComponent<PA_PlayerNode>();
+
             StartCoroutine(DelayCall());
         }
     } 
-    public void BuyMycorrhiza() { 
-        if (nutrientStores >= 25) {
-            if (purchasedNode) RefundPurchase();
-            nutrientStores -= 25;
-            purchasedNode = Instantiate(mycorrhizaPrefab, mousePos, Quaternion.identity, nodeManager.transform).GetComponent<PA_Placeable>();
-            StartCoroutine(DelayCall());
-        }
-    }
 
     IEnumerator DelayCall() {
         yield return new WaitForFixedUpdate();
         purchasedNode.Place();
-        nodeManager.ToggleFungusRadiusDisplay();
+        prevDisplayToggle = nodeManager.fungusDisplayActive;
+        nodeManager.SetFungusRadiusDisplay(true);
     }
 
-    public void RefundPurchase() {
+    public void CancelPlace() {
         Destroy(purchasedNode.gameObject);
-        nutrientStores += 25;
-        nodeManager.ToggleFungusRadiusDisplay();
+        nodeManager.SetFungusRadiusDisplay(prevDisplayToggle);
         purchasedNode = null;
+        costSlider.gameObject.SetActive(false);
+        costText.gameObject.SetActive(false);
     }
 
     public void HarvestNutrients() { 
         foreach (PA_AdjacencyNode node in nodeManager.fungusNodes) {
-            nutrientStores += node.growthRate;
+            fungusManager.nutrientTotal += node.growthRate;
         }
     }
 }
