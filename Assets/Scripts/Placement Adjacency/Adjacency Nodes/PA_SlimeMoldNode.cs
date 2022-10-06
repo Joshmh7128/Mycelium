@@ -5,9 +5,6 @@ using UnityEngine;
 public class PA_SlimeMoldNode : PA_PlayerNode
 {
 
-    List<PA_AdjacencyNode> nodesInCoverage = new List<PA_AdjacencyNode>();
-
-
     protected override void Start() {
         base.Start();
 
@@ -31,20 +28,20 @@ public class PA_SlimeMoldNode : PA_PlayerNode
                 node.growthRate -= .5f;
  
                 fungusManager.nutrientProduction += .25f;
-                nodesInCoverage.Add(node);
             }
         }
     }
 
     public override void RemoveBenefit(PA_AdjacencyNode node)
     {
-        if (nodesInCoverage.Contains(node)) {
-            growthRate -= .125f;
+        if (node.kingdom == PA_Taxonomy.Kingdom.Plant) {
+            if (node.stage == NodeStage.Decaying) { 
+                growthRate -= .125f;
 
-            node.growthRate += .5f;
+                node.growthRate += .5f;
 
-            fungusManager.nutrientProduction -= .25f;
-            nodesInCoverage.Remove(node);
+                fungusManager.nutrientProduction -= .25f;
+            }
         }
     }
 
