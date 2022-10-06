@@ -21,7 +21,6 @@ public class PA_MyceliumNode : PA_PlayerNode
         if (node.kingdom == PA_Taxonomy.Kingdom.Plant) {
             if (node.stage != NodeStage.Decaying) {
                 node.growthRate += .025f;
-                node.expectedLifetime += 5;
                 fungusManager.nutrientProduction += .025f;
             } else {
                 node.growthRate -= .05f;
@@ -38,7 +37,6 @@ public class PA_MyceliumNode : PA_PlayerNode
             if (node.stage != NodeStage.Decaying) {
                 node.growthRate -= .025f;
                 fungusManager.nutrientProduction -= .025f;
-                node.expectedLifetime -= 5;
             }
             else {
                 node.growthRate += .05f;

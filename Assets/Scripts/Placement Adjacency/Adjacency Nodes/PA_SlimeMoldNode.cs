@@ -11,7 +11,6 @@ public class PA_SlimeMoldNode : PA_PlayerNode
     protected override void Start() {
         base.Start();
 
-
         UpdateGFX();
     }
 
@@ -29,8 +28,8 @@ public class PA_SlimeMoldNode : PA_PlayerNode
         if (node.kingdom == PA_Taxonomy.Kingdom.Plant) {
             if (node.stage == NodeStage.Decaying) {
                 growthRate += .125f;
-                node.growthRate -= .333f;
-                node.growthRate *= 1.1f;
+                node.growthRate -= .5f;
+ 
                 fungusManager.nutrientProduction += .25f;
                 nodesInCoverage.Add(node);
             }
@@ -41,8 +40,8 @@ public class PA_SlimeMoldNode : PA_PlayerNode
     {
         if (nodesInCoverage.Contains(node)) {
             growthRate -= .125f;
-            node.growthRate /= 1.1f;
-            node.growthRate += .333f;
+
+            node.growthRate += .5f;
 
             fungusManager.nutrientProduction -= .25f;
             nodesInCoverage.Remove(node);

@@ -99,12 +99,12 @@ MonoBehaviour:
   - {fileID: 2100000, guid: b1f023a4f38fdaa4eb84b3b98b7e05c1, type: 2}
   kingdom: 1
   species: 3
-  adjacencyRadius: 15
-  maxAdjRadius: 15
+  adjacencyRadius: 22.5
+  adjRadiusMod: 15
   adjRadActive: 0
   adjacentNodes: []
   timeTick: 0.12
-  lifetimeRange: {x: 1, y: 5}
+  lifetimeRange: {x: 5, y: 10}
   currentLifetime: 0
   expectedLifetime: 0
   growth: 1.5

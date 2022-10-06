@@ -27,7 +27,7 @@ public class PA_AdjacencyNode : MonoBehaviour
     public PA_Taxonomy.Kingdom kingdom;
     public PA_Taxonomy.Species species;
     public float adjacencyRadius;
-    public float maxAdjRadius;
+    public float adjRadiusMod;
     public bool adjRadActive;
     public List<PA_AdjacencyNode> adjacentNodes;
     [SerializeField] protected float timeTick = .12f;
@@ -135,7 +135,7 @@ public class PA_AdjacencyNode : MonoBehaviour
         if (growth < 1) 
             Decompose();
 
-        adjacencyRadius = growth * maxAdjRadius;
+        adjacencyRadius = growth * adjRadiusMod;
         
         UpdateGFX();
     }

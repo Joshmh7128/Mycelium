@@ -33,8 +33,6 @@ public class PA_PlayerNode : PA_AdjacencyNode
         ToggleRadiusDisplay(false);
 
         EnterGrowing();
-
-        
     }
 
     public void Place() {

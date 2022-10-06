@@ -17,12 +17,6 @@ public class PA_PlantNode : PA_AdjacencyNode
 
         StartCoroutine(ProgressThroughLifetime());
     }
-       
-    protected override void ApplyGrowth() {
-        growth += growthRate * growthStep * timeTick;
-        adjacencyRadius = growth * maxAdjRadius;
-        UpdateGFX();
-    }
 
     protected override void EnterSustain() {
         stage = NodeStage.Sustaining;
@@ -48,7 +42,7 @@ public class PA_PlantNode : PA_AdjacencyNode
         }           
         base.EnterDecay();
 
-        growthRate = .02f;
+        growthRate = -.125f;
         gfxMR.gameObject.transform.localPosition += billboardOffset;
         UpdateGFX();
     }

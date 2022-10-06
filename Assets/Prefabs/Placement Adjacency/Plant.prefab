@@ -343,7 +343,7 @@ MonoBehaviour:
   kingdom: 0
   species: 0
   adjacencyRadius: 10
-  maxAdjRadius: 10
+  adjRadiusMod: 10
   adjRadActive: 0
   adjacentNodes: []
   timeTick: 0.12

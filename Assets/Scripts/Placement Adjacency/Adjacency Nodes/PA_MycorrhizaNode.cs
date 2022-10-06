@@ -18,8 +18,8 @@ public class PA_MycorrhizaNode : PA_PlayerNode
         if (node.kingdom == PA_Taxonomy.Kingdom.Plant) {
             if (node.stage != NodeStage.Decaying) {
                 node.maxGrowth += 1;
-                node.growthRate += .15f;
-                node.expectedLifetime += 10;
+                node.growthRate += .05f;
+                node.expectedLifetime += 5;
                 node.growthStep = maxGrowth / (expectedLifetime - currentLifetime) * growthRate;
                 fungusManager.nutrientProduction += .1f;
             }
@@ -32,8 +32,8 @@ public class PA_MycorrhizaNode : PA_PlayerNode
         if (node.kingdom == PA_Taxonomy.Kingdom.Plant) {
             if (node.stage != NodeStage.Decaying) {
                 node.maxGrowth -= 1;
-                node.growthRate -= .15f;
-                node.expectedLifetime -= 10;
+                node.growthRate -= .05f;
+                node.expectedLifetime -= 5;
                 float remainingLife = (expectedLifetime - currentLifetime > 0) ? expectedLifetime - currentLifetime : .01f;
                 node.growthStep = maxGrowth / remainingLife * growthRate;
                 fungusManager.nutrientProduction -= .1f;

@@ -34,11 +34,15 @@ public class LayerCameraController : MonoBehaviour
         Swap2D(is2D);
     }
 
-    // update
     private void Update()
     {
         // process input
         ProcessInput();
+    }
+
+    private void FixedUpdate()
+    {
+
         // process lerp
         ProcessMovement();
     }
@@ -85,7 +89,7 @@ public class LayerCameraController : MonoBehaviour
         // scroll input
         if (Input.mouseScrollDelta.y > 0) { zoom += zoomSpeed; }
         if (Input.mouseScrollDelta.y < 0) { zoom -= zoomSpeed; }
-        zoom = Mathf.Clamp(zoom, -5000, -1000);
+        zoom = Mathf.Clamp(zoom, -5000, -750);
 
         // movement input
         if (Mathf.Abs(Input.GetAxis("Vertical")) != 0 || Mathf.Abs(Input.GetAxis("Horizontal")) != 0)
