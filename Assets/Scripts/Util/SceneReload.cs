@@ -8,7 +8,7 @@ public class SceneReload : MonoBehaviour
     [SerializeField] string sceneName;
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F4)) {
+        if (Input.GetKeyDown(KeyCode.F5)) {
             SceneManager.LoadScene(sceneName);
         }
     }

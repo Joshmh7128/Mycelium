@@ -109,12 +109,17 @@ MonoBehaviour:
   expectedLifetime: 0
   growth: 1
   growthRate: 0
-  maxGrowth: 3
+  growthRateMod: 0
+  growthRateBase: 0
   growthStep: 0
+  maxGrowth: 3
+  maxGrowthRange: {x: 2, y: 4}
   stage: 0
-  storage: 5
   consumption: 0.125
+  production: 0.01
+  storage: 5
   cost: 5
+  buttonIndex: 0
   colliders:
   - {fileID: 1515349841372426071}
   invalidPlaceMaterials:
@@ -123,6 +128,8 @@ MonoBehaviour:
   placing: 0
   validPlacement: 0
   resourceDrain: 0
+  growthMod: 0.025
+  decayMod: 0.05
 --- !u!1 &7462374074603472418
 GameObject:
   m_ObjectHideFlags: 0

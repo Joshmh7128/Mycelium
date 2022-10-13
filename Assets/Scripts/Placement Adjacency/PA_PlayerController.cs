@@ -85,16 +85,18 @@ public class PA_PlayerController : MonoBehaviour
                 costSlider.maxValue = fungusManager.nutrientTotal;
                 costText.text = "-" + purchasedNode.cost;
 
-                if (Input.GetMouseButtonDown(0) && purchasedNode.validPlacement)
-                {
-                    purchasedNode.placing = false;
-                    PlaceNode();
-                }
-                else if (Input.GetMouseButtonDown(1))
-                {
-                    purchasedNode.placing = false;
+                if (fungusManager.nutrientTotal > purchasedNode.cost) {
+                    if (Input.GetMouseButtonDown(0) && purchasedNode.validPlacement) {
+                        purchasedNode.placing = false;
+                        PlaceNode();
+                    }
+                    else if (Input.GetMouseButtonDown(1))
+                    {
+                        purchasedNode.placing = false;
+                        CancelPlace();
+                    } 
+                } else
                     CancelPlace();
-                }              
             }
         }
 
@@ -105,13 +107,13 @@ public class PA_PlayerController : MonoBehaviour
         if (state) { 
             mousedNode.ToggleRadiusDisplay(state);
             //left control shows all nodes in this node's network
-            if (Input.GetKey(KeyCode.LeftControl)) {
+            if (Input.GetKey(KeyCode.LeftShift)) {
                 foreach(PA_AdjacencyNode node in mousedNode.adjacentNodes) { 
                     if (node)
                         node.ToggleRadiusDisplay(state);   
                 }
             //release of left control disables network view
-            } else if (Input.GetKeyUp(KeyCode.LeftControl)) { 
+            } else if (Input.GetKeyUp(KeyCode.LeftShift)) { 
                 foreach (PA_AdjacencyNode node in mousedNode.adjacentNodes) {              
                     if (node.kingdom == PA_Taxonomy.Kingdom.Plant)
                         node.ToggleRadiusDisplay(nodeManager.plantDisplayActive);
@@ -146,9 +148,17 @@ public class PA_PlayerController : MonoBehaviour
         nodeManager.adjacencyNodes.Add(purchasedNode); // also add to the master list so we can access via adjacency check
         purchasedNode.ConfirmPlace();
         nodeManager.SetFungusRadiusDisplay(prevDisplayToggle);
-        purchasedNode = null;
+
+        if (fungusManager.nutrientTotal > purchasedNode.cost) {
+            PA_PlayerNode tempNode = purchasedNode;
+            purchasedNode = null;
+            BuyNode(tempNode);
+        } else
+            purchasedNode = null;
+
         costSlider.gameObject.SetActive(false);
         costText.gameObject.SetActive(false);
+        
     }
 
     public void BuyNode(int index) {
@@ -156,6 +166,17 @@ public class PA_PlayerController : MonoBehaviour
             if (purchasedNode) CancelPlace();
            
             purchasedNode = Instantiate(playerNodePrefabs[index], mousePos, 
+                            Quaternion.identity, nodeManager.transform).GetComponent<PA_PlayerNode>();
+
+            StartCoroutine(DelayCall());
+        }
+    }
+
+    public void BuyNode(PA_PlayerNode node) {
+        if (fungusManager.nutrientTotal >= node.cost) {            
+            if (purchasedNode) CancelPlace();
+           
+            purchasedNode = Instantiate(playerNodePrefabs[(int)node.buttonIndex], mousePos, 
                             Quaternion.identity, nodeManager.transform).GetComponent<PA_PlayerNode>();
 
             StartCoroutine(DelayCall());
@@ -181,5 +202,6 @@ public class PA_PlayerController : MonoBehaviour
         foreach (PA_AdjacencyNode node in nodeManager.fungusNodes) {
             fungusManager.nutrientTotal += node.growthRate;
         }
+        if (fungusManager.nutrientTotal < 0) fungusManager.nutrientTotal = 0;
     }
 }

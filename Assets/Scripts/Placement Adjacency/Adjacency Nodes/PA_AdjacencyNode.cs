@@ -16,13 +16,6 @@ public class PA_AdjacencyNode : MonoBehaviour
     protected MeshRenderer planeMR;
     [SerializeField] protected Material[] planeMaterials;
 
-    /*
-    [Header("~~~ Stat Display UI ~~~")]
-    public GameObject canvas;
-    [SerializeField] Text lifetimeText;
-    [SerializeField] Slider lifetimeSlider;
-    */
-
     [Header("~~~ Adjacency Factors ~~~")]
     public PA_Taxonomy.Kingdom kingdom;
     public PA_Taxonomy.Species species;
@@ -39,8 +32,10 @@ public class PA_AdjacencyNode : MonoBehaviour
     [Header("~~~ Growth Factors ~~~")]
     public float growth;
     [Range(-1, 1)] public float growthRate;
-    [SerializeField] public float maxGrowth;    
-    [SerializeField] public float growthStep;
+    public float growthRateMod, growthRateBase; 
+    public float growthStep;
+    public float maxGrowth;
+    [SerializeField] Vector2 maxGrowthRange;
     public enum NodeStage { Growing, Sustaining, Decaying }
     public NodeStage stage;
 
@@ -130,6 +125,9 @@ public class PA_AdjacencyNode : MonoBehaviour
     }
 
     protected virtual void ApplyGrowth() {
+        growthRate = growthRateBase + growthRateMod;
+        float remainingLife = (expectedLifetime - currentLifetime > 0) ? expectedLifetime - currentLifetime : .01f;
+        growthStep = (maxGrowth / remainingLife) * Mathf.Abs(growthRate);
         growth += growthRate * growthStep * timeTick;
         if (growth > maxGrowth) growth = maxGrowth;
         if (growth < 1) 
@@ -142,9 +140,10 @@ public class PA_AdjacencyNode : MonoBehaviour
 
     protected virtual void EnterGrowing() {
         stage = NodeStage.Growing;
-        growthRate = (float)Random.Range(05, 90) / 100f;
+        growthRateBase = (float)Random.Range(05, 90) / 100f;
         expectedLifetime = (float)Random.Range((int)lifetimeRange.x, (int)lifetimeRange.y);
-        growthStep = maxGrowth / expectedLifetime * growthRate;
+        maxGrowth = Random.Range(maxGrowthRange.x * 100, maxGrowthRange.y * 100) / 100f;
+
 
         UpdateGFX();
     }
@@ -160,7 +159,7 @@ public class PA_AdjacencyNode : MonoBehaviour
         stage = NodeStage.Decaying;
         currentLifetime = 1;
 
-        growthRate = -growthRate;
+        growthRateBase = -growthRateBase / 2;
 
         UpdateGFX();
     }

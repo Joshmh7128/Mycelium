@@ -42,7 +42,7 @@ public class PA_PlantNode : PA_AdjacencyNode
         }           
         base.EnterDecay();
 
-        growthRate = -.125f;
+        growthRateBase = -.0125f;
         gfxMR.gameObject.transform.localPosition += billboardOffset;
         UpdateGFX();
     }

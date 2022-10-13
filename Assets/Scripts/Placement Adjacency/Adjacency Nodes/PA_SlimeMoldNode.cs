@@ -24,10 +24,11 @@ public class PA_SlimeMoldNode : PA_PlayerNode
         if (placing) return;
         if (node.kingdom == PA_Taxonomy.Kingdom.Plant) {
             if (node.stage == NodeStage.Decaying) {
-                growthRate += .125f;
-                node.growthRate -= .5f;
+                growthRateMod += 0.125f;
+                node.growthRateMod -= 0.125f;
+                node.growthRateMod *= 1.125f;
  
-                fungusManager.nutrientProduction += .25f;
+                fungusManager.nutrientProduction += 0.2f;
             }
         }
     }
@@ -35,12 +36,13 @@ public class PA_SlimeMoldNode : PA_PlayerNode
     public override void RemoveBenefit(PA_AdjacencyNode node)
     {
         if (node.kingdom == PA_Taxonomy.Kingdom.Plant) {
-            if (node.stage == NodeStage.Decaying) { 
-                growthRate -= .125f;
+            if (node.stage == NodeStage.Decaying) {          
+                growthRateMod -= .125f;
 
-                node.growthRate += .5f;
+                node.growthRateMod /= 1.125f;
+                node.growthRateMod += 0.125f;
 
-                fungusManager.nutrientProduction -= .25f;
+                fungusManager.nutrientProduction -= 0.2f;
             }
         }
     }

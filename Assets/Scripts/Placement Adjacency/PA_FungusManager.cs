@@ -42,6 +42,7 @@ public class PA_FungusManager : MonoBehaviour
 
         nutrientTotal += (nutrientProduction - nutrientConsumption) * Time.deltaTime;
         if (nutrientTotal > nutrientStorage) nutrientTotal = nutrientStorage;
+        if (nutrientTotal < 0) nutrientTotal = 0;
     }
 
     void UpdateSliderDisplay() {

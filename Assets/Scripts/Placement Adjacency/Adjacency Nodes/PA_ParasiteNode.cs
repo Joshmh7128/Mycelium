@@ -18,13 +18,12 @@ public class PA_ParasiteNode : PA_PlayerNode
         if (node.kingdom == PA_Taxonomy.Kingdom.Plant) {
             if (node.stage != NodeStage.Decaying) {
                 node.maxGrowth -= 1;
-                node.growthRate -= .15f;
-                node.expectedLifetime -= 10; 
-                float remainingLife = (expectedLifetime - currentLifetime > 0) ? expectedLifetime - currentLifetime : .01f;
-                node.growthStep = maxGrowth / remainingLife * growthRate;          
-                fungusManager.nutrientProduction += .5f;
+                node.growthRateMod -= .15f;
+                node.expectedLifetime -= 20; 
+                
+                fungusManager.nutrientProduction += .1f;
             }
-            else node.growthRate -= .01f;
+            else node.growthRate -= .05f;
         }
     }
 
@@ -33,11 +32,11 @@ public class PA_ParasiteNode : PA_PlayerNode
         if (node.kingdom == PA_Taxonomy.Kingdom.Plant) {
             if (node.stage != NodeStage.Decaying) {
                 node.maxGrowth += 1;
-                node.growthRate += .15f;
-                node.expectedLifetime += 10;
-                node.growthStep = maxGrowth / (expectedLifetime - currentLifetime) * growthRate;
-                fungusManager.nutrientProduction -= .5f;
-            } else node.growthRate += .01f;
+                node.growthRateMod += .15f;
+                node.expectedLifetime += 20;
+                
+                fungusManager.nutrientProduction -= .1f;
+            } else node.growthRate += .05f;
         }
     }   
     protected override void ValidPlacementCheck() {

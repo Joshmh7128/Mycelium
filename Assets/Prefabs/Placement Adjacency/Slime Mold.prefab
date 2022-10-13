@@ -109,12 +109,17 @@ MonoBehaviour:
   expectedLifetime: 0
   growth: 1.5
   growthRate: 0
-  maxGrowth: 2
+  growthRateMod: 0
+  growthRateBase: 0
   growthStep: 0
+  maxGrowth: 2
+  maxGrowthRange: {x: 1.5, y: 2}
   stage: 0
-  storage: 10
   consumption: 0.15
+  production: 0
+  storage: 10
   cost: 10
+  buttonIndex: 1
   colliders:
   - {fileID: 1515349841372426071}
   invalidPlaceMaterials:

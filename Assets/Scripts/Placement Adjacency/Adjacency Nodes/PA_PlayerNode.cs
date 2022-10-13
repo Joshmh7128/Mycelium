@@ -7,16 +7,17 @@ public class PA_PlayerNode : PA_AdjacencyNode
     protected PA_FungusManager fungusManager;
 
     [Header("~~~ Placable Refs ~~~")]
- 
-    [SerializeField] protected float storage;
-    [SerializeField] protected float consumption;
 
-    public float cost;
+    [SerializeField] protected float consumption, production;
+    [SerializeField] protected float storage;
+    public float cost, buttonIndex;
     [SerializeField] public Collider[] colliders;
 
     [SerializeField] Material[] invalidPlaceMaterials;
     public bool placing;
     public bool validPlacement;
+
+
 
     protected override void Start() {
 

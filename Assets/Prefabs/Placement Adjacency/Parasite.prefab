@@ -110,12 +110,17 @@ MonoBehaviour:
   expectedLifetime: 0
   growth: 1
   growthRate: 0
-  maxGrowth: 2
+  growthRateMod: 0
+  growthRateBase: 0
   growthStep: 0
+  maxGrowth: 2
+  maxGrowthRange: {x: 2, y: 3}
   stage: 0
-  storage: 20
   consumption: 0.2
+  production: 0
+  storage: 20
   cost: 25
+  buttonIndex: 3
   colliders:
   - {fileID: 1515349841372426071}
   invalidPlaceMaterials:
@@ -153,12 +158,17 @@ MonoBehaviour:
   expectedLifetime: 0
   growth: 1
   growthRate: 0
-  maxGrowth: 2
+  growthRateMod: 0
+  growthRateBase: 0
   growthStep: 0
+  maxGrowth: 2
+  maxGrowthRange: {x: 0, y: 0}
   stage: 0
-  storage: 0
   consumption: 0
+  production: 0
+  storage: 0
   cost: 20
+  buttonIndex: 0
   colliders:
   - {fileID: 1515349841372426071}
   invalidPlaceMaterials:

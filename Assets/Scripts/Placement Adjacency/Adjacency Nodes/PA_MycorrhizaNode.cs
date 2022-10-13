@@ -16,28 +16,30 @@ public class PA_MycorrhizaNode : PA_PlayerNode
     {
         if (placing) return;
         if (node.kingdom == PA_Taxonomy.Kingdom.Plant) {
-            if (node.stage != NodeStage.Decaying) {
-                node.maxGrowth += 1;
-                node.growthRate += .05f;
+            if (node.stage == NodeStage.Growing) {
+                node.maxGrowth += .25f;
+                node.growthRateMod += .1f;
                 node.expectedLifetime += 5;
-                node.growthStep = maxGrowth / (expectedLifetime - currentLifetime) * growthRate;
+                
                 fungusManager.nutrientProduction += .1f;
             }
-            else node.growthRate -= .01f;
+            else if (node.stage == NodeStage.Decaying)
+                node.growthRate -= .01f;
         }
     }
 
     public override void RemoveBenefit(PA_AdjacencyNode node)
     {
         if (node.kingdom == PA_Taxonomy.Kingdom.Plant) {
-            if (node.stage != NodeStage.Decaying) {
-                node.maxGrowth -= 1;
-                node.growthRate -= .05f;
+            if (node.stage == NodeStage.Growing) {
+                node.maxGrowth -= .25f;
+                node.growthRateMod -= .1f;
                 node.expectedLifetime -= 5;
-                float remainingLife = (expectedLifetime - currentLifetime > 0) ? expectedLifetime - currentLifetime : .01f;
-                node.growthStep = maxGrowth / remainingLife * growthRate;
+                
                 fungusManager.nutrientProduction -= .1f;
-            } else node.growthRate += .01f;
+            } 
+            else if (node.stage == NodeStage.Decaying) 
+                node.growthRate += .01f;
         }
     }   
     protected override void ValidPlacementCheck() {

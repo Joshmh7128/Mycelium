@@ -352,8 +352,11 @@ MonoBehaviour:
   expectedLifetime: 0
   growth: 1
   growthRate: 1
-  maxGrowth: 4
+  growthRateMod: 0
+  growthRateBase: 0
   growthStep: 0
+  maxGrowth: 4
+  maxGrowthRange: {x: 3, y: 4}
   stage: 0
 --- !u!1 &7462374074603472418
 GameObject:

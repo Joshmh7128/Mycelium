@@ -6,6 +6,7 @@ public class PA_MyceliumNode : PA_PlayerNode
 {
 
     public float resourceDrain;
+    [SerializeField] float growthMod, decayMod; 
 
     protected override void Start() {
         base.Start();
@@ -20,27 +21,27 @@ public class PA_MyceliumNode : PA_PlayerNode
         if (placing) return;
         if (node.kingdom == PA_Taxonomy.Kingdom.Plant) {
             if (node.stage != NodeStage.Decaying) {
-                node.growthRate += .025f;
-                fungusManager.nutrientProduction += .025f;
+                node.growthRateMod += growthMod;
+                fungusManager.nutrientProduction += production;
             } else {
-                node.growthRate -= .05f;
-                fungusManager.nutrientProduction += .01f;
+                node.growthRateMod -= decayMod;
+                fungusManager.nutrientProduction += production;
             }
-            node.growthRate *= 1.1f;      
+            node.growthRateMod *= 1.1f;      
         }
     }
 
     public override void RemoveBenefit(PA_AdjacencyNode node) {
         if (node.kingdom == PA_Taxonomy.Kingdom.Plant) {
-            node.growthRate /= 1.1f;
+            node.growthRateMod /= 1.1f;
 
             if (node.stage != NodeStage.Decaying) {
-                node.growthRate -= .025f;
-                fungusManager.nutrientProduction -= .025f;
+                node.growthRateMod -= growthMod;
+                fungusManager.nutrientProduction -= production;
             }
             else {
-                node.growthRate += .05f;
-                fungusManager.nutrientProduction -= .01f;
+                node.growthRateMod += decayMod;
+                fungusManager.nutrientProduction -= production;
             }
         }
     }
